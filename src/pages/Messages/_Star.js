@@ -4,9 +4,19 @@ import Tooltip from '../../components/Tooltip'
 import { Icon } from 'antd'
 
 const Actions = () => {
+  constructor(props) {
+    super(props);
+    this.state = {isStarred: false};
+    this.onStarClick = this.onStarClick.bind(this);
+  }
+  onStarClick = () {
+    this.setState(prevState => ({
+      isStarred: !prevState.isStarred
+    }));
+  }
   return (
     <Tooltip placement='top' title="Star this message">
-      <Icon type="star-o" />
+      <Icon type={this.state.isStarred ? 'star-o' : 'star'} onClick={this.onStarClick}/>
     </Tooltip>
   )
 }
