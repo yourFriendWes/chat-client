@@ -5,12 +5,10 @@ import Star from './_Star'
 import moment from 'moment'
 import Markdown from '../../components/Markdown'
 import Tooltip from '../../components/Tooltip'
-import { isStarred } from '../../reducers/starMessages'
 import { Avatar, Icon } from 'antd'
 
-const Message = ({ currentUser, editing, isStarredMessage, message, onDelete, renderHeading, room }) => {
+const Message = ({ currentUser, editing, isStarred, message, onDelete, renderHeading, room }) => {
   const { body, insertedAt, user } = message
-  console.log(isStarredMessage, Date.now())
 
   return (
     <div className='message'>
@@ -40,7 +38,7 @@ const Message = ({ currentUser, editing, isStarredMessage, message, onDelete, re
             <Star
               currentUser={currentUser}
               messageId={message.id}
-              isStarred={isStarredMessage}
+              isStarred={isStarred}
             />
             { editing && <Icon type='edit' /> }
           </div>
@@ -57,7 +55,7 @@ const Message = ({ currentUser, editing, isStarredMessage, message, onDelete, re
 }
 
 const mapStateToProps = (state, {message})=> ({
-  isStarredMessage: isStarred(state, message.id)
+  // isStarredMessage: isStarred(state, message.id)
 })
 
 Message.displayName = 'Message'
