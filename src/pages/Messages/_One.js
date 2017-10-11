@@ -1,13 +1,16 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import MessageActions from './_MessageActions'
 import Star from './_Star'
 import moment from 'moment'
 import Markdown from '../../components/Markdown'
 import Tooltip from '../../components/Tooltip'
+import { isStarred } from '../../reducers/starMessages'
 import { Avatar, Icon } from 'antd'
 
-const Message = ({ currentUser, editing, message, onDelete, renderHeading, room }) => {
+const Message = ({ currentUser, editing, isStarredMessage, message, onDelete, renderHeading, room }) => {
   const { body, insertedAt, user } = message
+  console.log(isStarredMessage, Date.now())
 
   return (
     <div className='message'>
@@ -34,7 +37,11 @@ const Message = ({ currentUser, editing, message, onDelete, renderHeading, room 
             <Tooltip placement='top' title={moment(insertedAt).calendar()}>
               { moment(insertedAt).format('h:mm A') }
             </Tooltip>
-            <Star/>
+            <Star
+              currentUser={currentUser}
+              messageId={message.id}
+              isStarred={isStarredMessage}
+            />
             { editing && <Icon type='edit' /> }
           </div>
         }
@@ -49,6 +56,10 @@ const Message = ({ currentUser, editing, message, onDelete, renderHeading, room 
   )
 }
 
+const mapStateToProps = (state, {message})=> ({
+  isStarredMessage: isStarred(state, message.id)
+})
+
 Message.displayName = 'Message'
 
-export default Message
+export default connect(mapStateToProps)(Message)

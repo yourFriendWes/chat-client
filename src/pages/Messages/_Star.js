@@ -2,32 +2,31 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Tooltip from '../../components/Tooltip'
 import { Icon } from 'antd'
+import {starMessage, unstarMessage} from "../../actions/starMessage"
 
-const Actions = () => {
-  constructor(props) {
-    super(props);
-    this.state = {isStarred: false};
-    this.onStarClick = this.onStarClick.bind(this);
-  }
-  onStarClick = () {
-    this.setState(prevState => ({
-      isStarred: !prevState.isStarred
-    }));
+const Star = ({currentUser, isStarred, toggleStar}) => {
+  const handleStarClick = (event) => {
+    if(event){ event.preventDefault() }
+    toggleStar()
   }
   return (
     <Tooltip placement='top' title="Star this message">
-      <Icon type={this.state.isStarred ? 'star-o' : 'star'} onClick={this.onStarClick}/>
+      <Icon type={isStarred ? 'star' : 'star-o'} onClick={handleStarClick} />
     </Tooltip>
   )
 }
-
-Actions.displayName = 'Star'
 
 const mapStateToProps = () => ({
 
 })
 
-const mapDispatchToProps = () => ({
+const mapDispatchToProps = (dispatch, {isStarred, messageId}) => ({
+  toggleStar: ()=> {
+    console.log(isStarred, Date.now())
+    isStarred ? dispatch(unstarMessage(messageId)) : dispatch(starMessage(messageId))
+  }
 })
+Star.displayName = 'Star'
 
-export default connect(mapStateToProps, mapDispatchToProps)(Actions)
+
+export default connect(mapStateToProps, mapDispatchToProps)(Star)

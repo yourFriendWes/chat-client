@@ -11,6 +11,7 @@ import roomsMetaReducer from './roomsMeta'
 import roomMessagesReducer from './roomMessages'
 import roomUsersReducer from './roomUsers'
 import socketReducer from './socket'
+import starMessagesReducer from './starMessages'
 
 export default combineReducers({
   client: clientReducer,
@@ -24,5 +25,6 @@ export default combineReducers({
   roomMessages: roomMessagesReducer,
   roomUsers: roomUsersReducer,
   routing: routerReducer,
-  socket: socketReducer
+  socket: socketReducer,
+  starMessages: starMessagesReducer
 })
