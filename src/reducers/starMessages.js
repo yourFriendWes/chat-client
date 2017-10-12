@@ -1,3 +1,5 @@
+import { omit } from 'lodash'
+
 const initialState = {
 
 }
@@ -7,8 +9,7 @@ const starMessagesReducer = (state = initialState, action) => {
     case 'STAR_MESSAGE':
       return {...state, [action.messageId]: true}
     case 'UNSTAR_MESSAGE':
-      delete state[action.messageId]
-      return state
+      return omit(state, action.messageId)
     default:
       return state
   }

@@ -46,12 +46,12 @@ class MessageList extends Component {
       return (
         <Message
           key={message.id}
+          isStarred={getIsStarred(message)}
           editing={editingMessageId === message.id}
           message={message}
           currentUser={currentUser}
           renderHeading={renderHeading}
           room={room}
-          isStarred={getIsStarred(message)}
         />
       )
     }
@@ -67,7 +67,7 @@ class MessageList extends Component {
 const mapStateToProps = (state, { room }) => ({
   currentUser: getCurrentUser(state),
   messages: getRoomMessages(state, room),
-  getIsStarred:(message)=> isStarred(state, message.id)
+  getIsStarred: (message) => isStarred(state, message.id)
 })
 
 export default connect(mapStateToProps)(MessageList)

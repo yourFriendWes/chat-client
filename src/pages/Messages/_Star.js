@@ -21,10 +21,9 @@ const mapStateToProps = () => ({
 })
 
 const mapDispatchToProps = (dispatch, {isStarred, messageId}) => ({
-  toggleStar: ()=> {
-    console.log(isStarred, Date.now())
+  toggleStar: () => (
     isStarred ? dispatch(unstarMessage(messageId)) : dispatch(starMessage(messageId))
-  }
+  )
 })
 Star.displayName = 'Star'
 
