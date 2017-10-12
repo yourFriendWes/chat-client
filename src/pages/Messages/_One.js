@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import MessageActions from './_MessageActions'
 import Star from './_Star'
 import moment from 'moment'
@@ -54,10 +53,6 @@ const Message = ({ currentUser, editing, isStarred, message, onDelete, renderHea
   )
 }
 
-const mapStateToProps = (state, {message})=> ({
-  // isStarredMessage: isStarred(state, message.id)
-})
-
 Message.displayName = 'Message'
 
-export default connect(mapStateToProps)(Message)
+export default Message
