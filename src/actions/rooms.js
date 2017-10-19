@@ -6,6 +6,7 @@ import { addMessage, removeMessage, replaceMessage, replaceMessages } from './ro
 import { updateRoomUsers } from './roomUsers'
 import { getRooms, getRoomsChannel } from '../reducers/rooms'
 import { getRoomUsers } from '../reducers/roomUsers'
+import { starMessage, unstarMessage } from './starMessage'
 
 export const createRoom = (roomName) => (dispatch, getState) => {
   const rooms = getRoomsChannel(getState())
@@ -80,6 +81,14 @@ export const joinRoom = (roomName, onSuccess, onError) => (dispatch, getState) =
 
     channel.on('message:deleted', (data) => (
       dispatch(removeMessage(roomName, camelizeKeys(data, {})))
+    ))
+
+    channel.on('starred_message:created', (data) => (
+      dispatch(starMessage(camelizeKeys(data, {})))
+    ))
+
+    channel.on('starred_message:deleted', (data) => (
+      dispatch(unstarMessage(camelizeKeys(data, {})))
     ))
 
     return channel
