@@ -11,7 +11,9 @@ const starMessagesReducer = (state = initialState, action) => {
     case 'UNSTAR_MESSAGE':
       return omit(state, action.messageId)
     case 'REPLACE_STAR_MESSAGES':
-      return action.starredMessages
+      return action.starredMessages.map((item) => (
+        item['message_id']
+      ))
   default:
       return state
   }
