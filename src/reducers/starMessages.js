@@ -12,7 +12,7 @@ const starMessagesReducer = (state = initialState, action) => {
       return omit(state, action.messageId)
     case 'REPLACE_STAR_MESSAGES':
       return action.starredMessages.map((item) => (
-        item['message_id']
+        {[item['message_id']]: true}
       ))
   default:
       return state
@@ -20,7 +20,7 @@ const starMessagesReducer = (state = initialState, action) => {
 }
 
 export const isStarred = (state, messageId) =>{
-  return state.starMessages[messageId] === true
+  return state.starMessages[messageId] === true || state.starMessages[0][messageId] === true
 }
 
 export default starMessagesReducer
