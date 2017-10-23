@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Tooltip from '../../components/Tooltip'
 import { Icon } from 'antd'
-import {starMessage, unstarMessage, submitStar} from "../../actions/starMessage"
+import {deleteStar, unstarMessage, starMessage, submitStar} from "../../actions/starMessage"
 
 const Star = ({currentUser, isStarred, toggleStar}) => {
   const handleStarClick = (event) => {
@@ -21,7 +21,7 @@ const mapStateToProps = () => ({
 
 const mapDispatchToProps = (dispatch, {isStarred, messageId}) => ({
   toggleStar: () => (
-      isStarred ? dispatch(unstarMessage(messageId)) : dispatch(starMessage(messageId)) & dispatch(submitStar(messageId))
+      isStarred ? dispatch(unstarMessage(messageId)) & dispatch(deleteStar(messageId)) : dispatch(starMessage(messageId)) & dispatch(submitStar(messageId))
   )
 })
 

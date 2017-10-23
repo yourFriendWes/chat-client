@@ -19,3 +19,8 @@ export const submitStar = (messageId) => (dispatch, getState) => {
   const rooms = getRoomsChannel(getState())
   return rooms.push('starred_message:create', messageId)
 }
+
+export const deleteStar = (messageId) => (dispatch, getState) => {
+  const rooms = getRoomsChannel(getState())
+  return rooms.push('starred_message:delete', messageId)
+}
