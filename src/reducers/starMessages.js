@@ -1,4 +1,5 @@
 import { omit } from 'lodash'
+import { listToObject } from '../helpers/data'
 
 const initialState = {
 
@@ -11,16 +12,14 @@ const starMessagesReducer = (state = initialState, action) => {
     case 'UNSTAR_MESSAGE':
       return omit(state, action.messageId)
     case 'REPLACE_STAR_MESSAGES':
-      return action.starredMessages.map((item) => (
-        {[item['message_id']]: true}
-      ))
+      return listToObject(action.starredMessages, 'message_id')
   default:
       return state
   }
 }
 
 export const isStarred = (state, messageId) =>{
-  return state.starMessages[messageId] === true || state.starMessages[0][messageId] === true
+  return !!state.starMessages[messageId]
 }
 
 export default starMessagesReducer
