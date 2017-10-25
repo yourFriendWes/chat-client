@@ -4,8 +4,9 @@ import history from '../../app/history'
 import { deleteMessage } from '../../actions/roomMessages'
 import { editMessagePath } from '../../helpers/paths'
 import { Button, Modal } from 'antd'
+import Star from './_Star'
 
-const Actions = ({ currentUser, message, onDelete, room }) => {
+const Actions = ({ currentUser, message, onDelete, room, isStarred }) => {
   const { body, id, user } = message
 
   const OwnerActions = () => {
@@ -37,7 +38,13 @@ const Actions = ({ currentUser, message, onDelete, room }) => {
 
     return (
       <div className='message-actions'>
+
         <Button.Group>
+          <Star
+            currentUser={currentUser}
+            messageId={message.id}
+            isStarred={isStarred}
+          />
           <Button icon='edit' onClick={onEdit} />
           <Button icon='delete' onClick={onDeleteConfirm} />
         </Button.Group>

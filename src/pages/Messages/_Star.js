@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Tooltip from '../../components/Tooltip'
-import { Icon } from 'antd'
+import { Button } from 'antd'
 import {deleteStar, unstarMessage, starMessage, submitStar} from "../../actions/starMessage"
 
 const Star = ({currentUser, isStarred, toggleStar}) => {
@@ -10,9 +10,15 @@ const Star = ({currentUser, isStarred, toggleStar}) => {
     toggleStar()
   }
   return (
+
     <Tooltip placement='top' title="Star this message">
-      <Icon type={isStarred ? 'star' : 'star-o'} onClick={handleStarClick} />
+      <Button
+        icon={isStarred ? 'star' : 'star-o'}
+        style={isStarred ? {color: '#ffd700'} : {color: '#000000'}}
+        onClick={handleStarClick}
+        />
     </Tooltip>
+
   )
 }
 

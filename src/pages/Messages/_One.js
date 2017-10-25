@@ -1,6 +1,5 @@
 import React from 'react'
 import MessageActions from './_MessageActions'
-import Star from './_Star'
 import moment from 'moment'
 import Markdown from '../../components/Markdown'
 import Tooltip from '../../components/Tooltip'
@@ -34,19 +33,16 @@ const Message = ({ currentUser, editing, isStarred, message, onDelete, renderHea
             <Tooltip placement='top' title={moment(insertedAt).calendar()}>
               { moment(insertedAt).format('h:mm A') }
             </Tooltip>
-            <Star
-              currentUser={currentUser}
-              messageId={message.id}
-              isStarred={isStarred}
-            />
             { editing && <Icon type='edit' /> }
           </div>
         }
+
         <Markdown value={body} />
         <MessageActions
           currentUser={currentUser}
           message={message}
           room={room}
+          isStarred={isStarred}
         />
       </div>
     </div>
