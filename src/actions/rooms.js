@@ -1,44 +1,35 @@
-import { Presence } from 'phoenix'
-import { map, reverse } from 'lodash'
-import { camelizeKeys } from 'humps'
+import { reverse } from 'lodash'
+import { getRoomsChannel } from '../reducers/rooms'
+import { camelize } from '../helpers/data'
 import { joinChannel } from './channels'
+import { addPublicRoom, replacePublicRooms } from './publicRooms'
 import { addMessage, removeMessage, replaceMessage, replaceMessages } from './roomMessages'
-import { updateRoomUsers } from './roomUsers'
-import { getRooms, getRoomsChannel } from '../reducers/rooms'
-import { getRoomUsers } from '../reducers/roomUsers'
+import { addRoomSubscription, replaceRoomSubscriptions } from './roomSubscriptions'
 import { replaceStarMessages, starMessage, unstarMessage } from './starMessage'
 
-export const createRoom = (roomName) => (dispatch, getState) => {
-  const rooms = getRoomsChannel(getState())
+export const createRoom = (name, type, onSuccess, onError) => (dispatch, getState) => {
+  const channel = getRoomsChannel(getState())
 
-  return rooms.push('rooms:create', roomName)
+  return channel
+    .push('rooms:create', {name: name, type: type})
+    .receive('ok', (response) => onSuccess && onSuccess(response))
+    .receive('error', (response) => onError && onError(response))
 }
 
-export const viewRoom = (roomName) => ({
+export const viewRoom = (slug) => ({
   type: 'VIEW_ROOM',
-  room: roomName
+  room: slug
 })
 
-const updateRooms = (rooms) => ({
-  type: 'UPDATE_ROOMS',
-  rooms: rooms
-})
-
-export const joinRooms = (onSuccess, onError) => (dispatch, getState) => {
+export const joinRoomsChannel = (onSuccess, onError) => (dispatch, getState) => {
   const key = 'rooms'
   const channelCallbacks = (channel) => {
-    channel.on('presence_state', (data) => {
-      const current = getRooms(getState())
-      const updated = Presence.syncState(current, data)
-
-      dispatch(updateRooms(updated))
+    channel.on('rooms:public', (data) => {
+      dispatch(replacePublicRooms(data.rooms))
     })
 
-    channel.on('presence_diff', (data) => {
-      const current = getRooms(getState())
-      const updated = Presence.syncDiff(current, data)
-
-      dispatch(updateRooms(updated))
+    channel.on('rooms:public:created', (data) => {
+      dispatch(addPublicRoom(data))
     })
      channel.on('starred_messages_state', (data) => {
        dispatch(replaceStarMessages(data['starred_messages']))
@@ -49,48 +40,41 @@ export const joinRooms = (onSuccess, onError) => (dispatch, getState) => {
   return joinChannel(dispatch, getState, key, channelCallbacks, onSuccess, onError)
 }
 
-export const joinRoom = (roomName, onSuccess, onError) => (dispatch, getState) => {
-  const key = 'room:' + roomName
+export const joinRoomChannel = (slug, onSuccess, onError) => (dispatch, getState) => {
+  const key = 'room:' + slug
   const channelCallbacks = (channel) => {
-    channel.on('presence_state', (data) => {
-      const current = getRoomUsers(getState(), roomName)
-      const users = Presence.syncState(current, data)
-
-      dispatch(updateRoomUsers(roomName, users))
+    channel.on('room:subscriptions', (data) => {
+      dispatch(replaceRoomSubscriptions(slug, camelize(data.subscriptions)))
     })
 
-    channel.on('presence_diff', (data) => {
-      const current = getRoomUsers(getState(), roomName)
-      const users = Presence.syncDiff(current, data)
-
-      dispatch(updateRoomUsers(roomName, users))
+    channel.on('room:subscription:created', (data) => {
+      dispatch(addRoomSubscription(slug, camelize(data)))
     })
 
-    channel.on('message_state', (data) => {
-      const messages = reverse((data || {}).messages)
-      const cased = map(messages, (message) => camelizeKeys(message, {}))
+    channel.on('messages', (data) => {
+      const messages = camelize(reverse((data || {}).messages))
 
-      dispatch(replaceMessages(roomName, cased))
+      dispatch(replaceMessages(slug, messages))
     })
 
     channel.on('message:created', (data) => (
-      dispatch(addMessage(roomName, camelizeKeys(data, {})))
+      dispatch(addMessage(slug, camelize(data)))
     ))
 
     channel.on('message:updated', (data) => (
-      dispatch(replaceMessage(roomName, camelizeKeys(data, {})))
+      dispatch(replaceMessage(slug, camelize(data)))
     ))
 
     channel.on('message:deleted', (data) => (
-      dispatch(removeMessage(roomName, camelizeKeys(data, {})))
+      dispatch(removeMessage(slug, camelize(data)))
     ))
 
     channel.on('starred_message:created', (data) => (
-      dispatch(starMessage(camelizeKeys(data, {})))
+      dispatch(starMessage(camelize(data, {})))
     ))
 
     channel.on('starred_message:deleted', (data) => (
-      dispatch(unstarMessage(camelizeKeys(data, {})))
+      dispatch(unstarMessage(camelize(data, {})))
     ))
 
     return channel

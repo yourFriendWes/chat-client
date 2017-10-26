@@ -6,10 +6,9 @@ import { logOut } from '../../actions/currentUser'
 import { socketClose } from '../../actions/socket'
 import { Button, Icon } from 'antd'
 
-export const Logout = ({ flashMessage, onCloseSocket, onLogOut }) => {
+export const Logout = ({ flashMessage, onLogOut }) => {
   const onClick = () => {
     onLogOut()
-    onCloseSocket()
     flashMessage('Successfully logged out', 'success')
     history.push('/')
   }
@@ -27,8 +26,10 @@ const mapDispatchToProps = (dispatch) => ({
   flashMessage: (title, type, description) => (
     dispatch(createFlashMessage(title, type, description))
   ),
-  onCloseSocket: () => dispatch(socketClose()),
-  onLogOut: () => dispatch(logOut())
+  onLogOut: () => {
+    dispatch(socketClose())
+    dispatch(logOut())
+  }
 })
 
 export default connect(undefined, mapDispatchToProps)(Logout)

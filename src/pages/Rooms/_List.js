@@ -1,56 +1,30 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import React from 'react'
 import { map } from 'lodash'
-import moment from 'moment'
-import { joinRooms } from '../../actions/rooms'
-import { getRooms } from '../../reducers/rooms'
-import { getLastViewed } from '../../reducers/roomsMeta'
-import { meta } from '../../helpers/presence'
-import CreateRoomForm from './_Form'
+import history from '../../app/history'
+import { roomPath } from '../../helpers/paths'
+import { Button } from 'antd'
 
-export class RoomsList extends Component {
-  componentDidMount () {
-    this.props.onJoin()
-  }
-
-  render () {
-    const { rooms, lastViewed } = this.props
-
-    const renderRoom = (room, name) => {
-      const lastMessage = meta(room, 'last_message')
-      const lastMessageAt = lastMessage ? moment(lastMessage.inserted_at).unix() : 0
-      const lastViewedAt = Math.floor((lastViewed(name) || 0) / 1000)
-      const classes = lastMessageAt > lastViewedAt ? 'new-message' : ''
-
-      return (
-        <li key={name} className={classes}>
-          <Link to={'/rooms/' + name}>
-            {name}
-          </Link>
-        </li>
-      )
-    }
-
+const RoomsList = ({ rooms }) => {
+  const renderRoom = (room) => {
     return (
-      <div>
-        <h3>Rooms</h3>
-        <ul className='rooms-list'>
-          { map(rooms, renderRoom) }
-        </ul>
-        <CreateRoomForm />
-      </div>
+      <li key={room.slug}>
+        <h3>{room.slug}</h3>
+        <Button icon='arrow-right' onClick={() => history.push(roomPath(room))}>
+          View
+        </Button>
+      </li>
     )
   }
+
+  return (
+    <div className='chat-resource-list-container scroll-container'>
+      <ul className='chat-resource-list'>
+        { map(rooms, renderRoom) }
+      </ul>
+    </div>
+  )
 }
 
-const mapStateToProps = (state) => ({
-  lastViewed: (key) => getLastViewed(state, key),
-  rooms: getRooms(state)
-})
+RoomsList.displayName = 'RoomsList'
 
-const mapDispatchToProps = (dispatch) => ({
-  onJoin: () => dispatch(joinRooms())
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(RoomsList)
+export default RoomsList
