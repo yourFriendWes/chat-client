@@ -4,16 +4,15 @@ import { compose, graphql } from 'react-apollo'
 import { logInWithProvider } from '../../api/session'
 import history from '../../app/history'
 import { logIn as logInCurrentUser } from '../../actions/currentUser'
-import { fetchSocket } from '../../actions/socket'
-import { isLoggedIn } from '../../reducers/currentUser'
+import { getIsLoggedIn } from '../../reducers/currentUser'
 import { queryString } from '../../helpers/paths'
 import Page from '../../components/Page'
 import Redirect from '../../components/Redirect'
 
-export const Callback = ({ loggedIn, match, mutate, logInToClient }) => {
+export const Callback = ({ isLoggedIn, match, mutate, logInToClient }) => {
   const landingPage = '/notes'
 
-  if (loggedIn) {
+  if (isLoggedIn) {
     return <Redirect to={landingPage} />
   }
 
@@ -49,13 +48,12 @@ const CallbackWithData = compose(
 )(Callback)
 
 const mapStateToProps = (state) => ({
-  loggedIn: isLoggedIn(state)
+  isLoggedIn: getIsLoggedIn(state)
 })
 
 const mapDispatchToProps = (dispatch) => ({
   logInToClient: (data) => {
     dispatch(logInCurrentUser(data))
-    dispatch(fetchSocket())
   }
 })
 

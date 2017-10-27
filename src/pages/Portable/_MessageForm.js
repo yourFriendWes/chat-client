@@ -2,7 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { reset as resetForm } from 'redux-form'
 import { setActiveRoom } from '../../actions/portable'
-import { createRoom, joinRooms, joinRoom } from '../../actions/rooms'
+import { createRoom, joinRoomChannel, joinRoomsChannel } from '../../actions/rooms'
+import { joinUsersChannel } from '../../actions/users'
 import { submitMessage } from '../../actions/roomMessages'
 import MessagesForm from '../Messages/_Form'
 
@@ -23,20 +24,27 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch, { isActive, form, room }) => ({
   onSubmit: (data) => {
-    const onJoinRoom = async () => {
+    const afterJoinRoom = async () => {
       dispatch(setActiveRoom(room))
       await dispatch(submitMessage(room, data.message))
 
       return dispatch(resetForm(form))
     }
 
-    const onJoinRooms = async () => {
-      if (!isActive) { await dispatch(createRoom(room)) }
+    const afterJoinRooms = async () => {
+      const action = (slug) => dispatch(joinRoomChannel(slug, afterJoinRoom))
+      const onCreateRoom = (response) => action(response.room.slug)
 
-      return dispatch(joinRoom(room, onJoinRoom))
+      if (!isActive) {
+        await dispatch(createRoom(room, 'support', onCreateRoom))
+      } else {
+        return action(room)
+      }
     }
 
-    return dispatch(joinRooms(onJoinRooms))
+    const afterJoinUsers = () => dispatch(joinRoomsChannel(afterJoinRooms))
+
+    return dispatch(joinUsersChannel(afterJoinUsers))
   }
 })
 

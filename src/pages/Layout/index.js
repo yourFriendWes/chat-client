@@ -1,18 +1,41 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Route, Switch, withRouter } from 'react-router-dom'
-import { isLoggedIn } from '../../reducers/currentUser'
+import { getIsLoggedIn } from '../../reducers/currentUser'
+import ConnectionError from '../../components/ConnectionError'
 import ErrorHandler from '../../components/ErrorHandler'
 import FlashMessages from '../../components/FlashMessages'
+import InvisibleContainer from '../../components/InvisibleContainer'
 import DraggableBanner from './_DraggableBanner'
 import Page from './_Page'
-import LoggedInRoutes from './_LoggedInRoutes'
-import Login from '../Login'
+import Sidebar from './_Sidebar'
 import '../../static/antd.css'
 import '../../static/common.css'
 import '../../static/ui.css'
 
-export const Layout = ({ loggedIn }) => {
+import Login from '../Login'
+import Main from './_Main'
+import NewDirectMessage from '../DirectMessages/New'
+import NewRoom from '../Rooms/New'
+import Room from '../Room'
+import SearchRoom from '../Rooms/Search'
+
+export const Layout = ({ isLoggedIn }) => {
+  const loggedInRoutes = (
+    <InvisibleContainer>
+      <ConnectionError />
+      <Sidebar />
+      <Switch>
+        <Route path={'/new-direct-message'} component={NewDirectMessage} />
+        <Route path={'/new-room'} component={NewRoom} />
+        <Route path={'/search-rooms'} component={SearchRoom} />
+        <Route path={'/rooms/:room/messages/:messageId/edit'} component={Room} />
+        <Route path={'/rooms/:room'} component={Room} />
+        <Route component={Main} />
+      </Switch>
+    </InvisibleContainer>
+  )
+
   const loggedOutRoutes = (
     <Switch>
       <Route component={Login} />
@@ -24,7 +47,7 @@ export const Layout = ({ loggedIn }) => {
       <DraggableBanner />
       <FlashMessages />
       <ErrorHandler>
-        { loggedIn ? <LoggedInRoutes /> : loggedOutRoutes }
+        { isLoggedIn ? loggedInRoutes : loggedOutRoutes }
       </ErrorHandler>
     </Page>
   )
@@ -33,7 +56,7 @@ export const Layout = ({ loggedIn }) => {
 Layout.displayName = 'Layout'
 
 const mapStateToProps = (state) => ({
-  loggedIn: isLoggedIn(state)
+  isLoggedIn: getIsLoggedIn(state)
 })
 
 export default withRouter(connect(mapStateToProps)(Layout))
