@@ -13,12 +13,12 @@ const starMessagesReducer = (state = initialState, action) => {
       return omit(state, action.messageId)
     case 'REPLACE_STAR_MESSAGES':
       return listToObject(action.starredMessages, 'message_id')
-  default:
+    default:
       return state
   }
 }
 
-export const isStarred = (state, messageId) =>{
+export const isStarred = (state, messageId) => {
   return !!state.starMessages[messageId]
 }
 

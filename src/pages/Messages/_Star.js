@@ -2,16 +2,16 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Tooltip from '../../components/Tooltip'
 import { Button } from 'antd'
-import {deleteStar, unstarMessage, starMessage, submitStar} from "../../actions/starMessage"
+import {deleteStar, unstarMessage, starMessage, submitStar} from '../../actions/starMessage'
 
 const Star = ({currentUser, isStarred, toggleStar}) => {
   const handleStarClick = (event) => {
-    if(event){ event.preventDefault() }
+    if (event) { event.preventDefault() }
     toggleStar()
   }
   return (
 
-    <Tooltip placement='top' title="Star this message">
+    <Tooltip placement='top' title='Star this message'>
       <Button
         icon={isStarred ? 'star' : 'star-o'}
         style={isStarred ? {color: '#ffd700'} : {color: '#000000'}}
@@ -31,8 +31,6 @@ const mapDispatchToProps = (dispatch, {isStarred, messageId}) => ({
   )
 })
 
-
 Star.displayName = 'Star'
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Star)

@@ -11,7 +11,7 @@ export const unstarMessage = (messageId) => ({
 })
 
 export const replaceStarMessages = (data) => ({
-  type: "REPLACE_STAR_MESSAGES",
+  type: 'REPLACE_STAR_MESSAGES',
   starredMessages: data
 })
 
