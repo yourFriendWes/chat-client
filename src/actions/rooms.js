@@ -40,9 +40,9 @@ export const joinRooms = (onSuccess, onError) => (dispatch, getState) => {
 
       dispatch(updateRooms(updated))
     })
-     channel.on('starred_messages_state', (data) => {
-       dispatch(replaceStarMessages(data['starred_messages']))
-     })
+    channel.on('starred_messages', (data) => {
+      dispatch(replaceStarMessages(data['starred_messages']))
+    })
     return channel
   }
 
