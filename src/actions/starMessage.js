@@ -15,12 +15,20 @@ export const replaceStarMessages = (data) => ({
   starredMessages: data
 })
 
-export const submitStar = (messageId) => (dispatch, getState) => {
-  const rooms = getRoomsChannel(getState())
-  return rooms.push('starred_message:create', messageId)
+export const submitStar = (messageId, onSuccess, onError) => (dispatch, getState) => {
+  const channel = getRoomsChannel(getState())
+
+  return channel
+    .push('starred_message:create', messageId)
+    .receive('ok', (response) => onSuccess && onSuccess(response))
+    .receive('error', (response) => onError && onError(response))
 }
 
-export const deleteStar = (messageId) => (dispatch, getState) => {
-  const rooms = getRoomsChannel(getState())
-  return rooms.push('starred_message:delete', messageId)
+export const deleteStar = (messageId, onSuccess, onError) => (dispatch, getState) => {
+  const channel = getRoomsChannel(getState())
+
+  return channel
+    .push('starred_message:delete', messageId)
+    .receive('ok', (response) => onSuccess && onSuccess(response))
+    .receive('error', (response) => onError && onError(response))
 }

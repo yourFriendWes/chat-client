@@ -26,9 +26,20 @@ const mapStateToProps = () => ({
 })
 
 const mapDispatchToProps = (dispatch, {isStarred, messageId}) => ({
-  toggleStar: () => (
-      isStarred ? dispatch(unstarMessage(messageId)) & dispatch(deleteStar(messageId)) : dispatch(starMessage(messageId)) & dispatch(submitStar(messageId))
-  )
+  toggleStar: () => {
+    const star = () => {
+      const onSuccess = () => dispatch(starMessage(messageId))
+
+      return dispatch(submitStar(messageId, onSuccess))
+    }
+    const unstar = () => {
+      const onSuccess = () => dispatch(unstarMessage(messageId))
+
+      return dispatch(deleteStar(messageId, onSuccess))
+    }
+
+    return isStarred ? unstar() : star()
+  }
 })
 
 Star.displayName = 'Star'
