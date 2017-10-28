@@ -18,7 +18,7 @@ const starMessagesReducer = (state = initialState, action) => {
   }
 }
 
-export const isStarred = (state, messageId) => {
+export const getIsStarred = (state, messageId) => {
   return !!state.starMessages[messageId]
 }
 
