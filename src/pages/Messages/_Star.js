@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { deleteStar, starMessage, submitStar, unstarMessage } from '../../actions/starMessage'
 import Tooltip from '../../components/Tooltip'
 import { Button } from 'antd'
-import {deleteStar, unstarMessage, starMessage, submitStar} from '../../actions/starMessage'
 
 const Star = ({currentUser, isStarred, toggleStar}) => {
   const handleStarClick = (event) => {
@@ -22,26 +22,26 @@ const Star = ({currentUser, isStarred, toggleStar}) => {
   )
 }
 
+Star.displayName = 'Star'
+
 const mapStateToProps = () => ({
 })
 
 const mapDispatchToProps = (dispatch, {isStarred, messageId}) => ({
   toggleStar: () => {
-    const star = () => {
-      const onSuccess = () => dispatch(starMessage(messageId))
-
-      return dispatch(submitStar(messageId, onSuccess))
-    }
     const unstar = () => {
       const onSuccess = () => dispatch(unstarMessage(messageId))
 
       return dispatch(deleteStar(messageId, onSuccess))
     }
+    const star = () => {
+      const onSuccess = () => dispatch(starMessage(messageId))
+
+      return dispatch(submitStar(messageId, onSuccess))
+    }
 
     return isStarred ? unstar() : star()
   }
 })
-
-Star.displayName = 'Star'
 
 export default connect(mapStateToProps, mapDispatchToProps)(Star)
