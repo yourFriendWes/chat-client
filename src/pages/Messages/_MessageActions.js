@@ -11,7 +11,17 @@ const Actions = ({ currentUser, message, onDelete, room, isStarred }) => {
 
   const OwnerActions = () => {
     if (currentUser.id !== user.id) {
-      return null
+      return (
+        <div className='message-actions'>
+          <Button.Group>
+            <Star
+              currentUser={currentUser}
+              messageId={message.id}
+              isStarred={isStarred}
+            />
+          </Button.Group>
+        </div>
+      )
     }
 
     const onDeleteConfirm = (event) => {
