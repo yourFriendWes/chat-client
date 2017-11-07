@@ -1,11 +1,11 @@
 import { reverse } from 'lodash'
 import { getRoomsChannel } from '../reducers/rooms'
-import { camelize } from '../helpers/data'
-import { joinChannel } from './channels'
+import { joinChannel, leaveChannel } from './channels'
 import { addPublicRoom, replacePublicRooms } from './publicRooms'
 import { addMessage, removeMessage, replaceMessage, replaceMessages } from './roomMessages'
-import { addRoomSubscription, replaceRoomSubscriptions } from './roomSubscriptions'
+import { addRoomSubscription, removeRoomSubscription, replaceRoomSubscription, replaceRoomSubscriptions } from './roomSubscriptions'
 import { replaceStarMessages, starMessage, unstarMessage } from './starMessage'
+import { camelize } from '../helpers/data'
 
 export const createRoom = (name, type, onSuccess, onError) => (dispatch, getState) => {
   const channel = getRoomsChannel(getState())
@@ -51,6 +51,14 @@ export const joinRoomChannel = (slug, onSuccess, onError) => (dispatch, getState
       dispatch(addRoomSubscription(slug, camelize(data)))
     })
 
+    channel.on('room:subscription:updated', (data) => {
+      dispatch(replaceRoomSubscription(slug, camelize(data)))
+    })
+
+    channel.on('room:subscription:deleted', (data) => {
+      dispatch(removeRoomSubscription(slug, camelize(data)))
+    })
+
     channel.on('messages', (data) => {
       const messages = camelize(reverse((data || {}).messages))
 
@@ -81,4 +89,10 @@ export const joinRoomChannel = (slug, onSuccess, onError) => (dispatch, getState
   }
 
   return joinChannel(dispatch, getState, key, channelCallbacks, onSuccess, onError)
+}
+
+export const leaveRoomChannel = (slug) => (dispatch) => {
+  const key = 'room:' + slug
+
+  return dispatch(leaveChannel(key))
 }

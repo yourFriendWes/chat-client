@@ -6,6 +6,17 @@ body {
   width: 100vw;
 }
 
+/* Dynamically created DOM elements */
+
+.ant-dropdown-menu-item button {
+  background: inherit;
+  border: none;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 /* Structure */
 
 #chat-root {
@@ -39,7 +50,10 @@ body {
   }
 
     #header {
-      padding: 10px 0 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+      padding: 10px 20px 10px 20px;
       width: 100%;
     }
 
@@ -64,7 +78,7 @@ body {
     padding: 0 0 10px 0;
   }
 
-  .chat-room-sidebar {
+  .chat-room-details {
     flex-basis: 240px;
     padding: 0 0 0 20px;
   }
@@ -94,11 +108,34 @@ body {
         flex-direction: row;
         justify-content: space-between;
         width: 100%;
+
+        button {
+          display: none;
+        }
+
+        &:hover button {
+          display: inline-block;
+        }
       }
     }
   }
 
   /* Content */
+
+  button.anchor {
+    background: inherit;
+    border: none;
+    margin: 0;
+    padding: 0;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .chat-room-header-actions button {
+    font-size: 20px;
+  }
 
   .chat-search {
     width: 100%;
