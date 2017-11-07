@@ -5,7 +5,7 @@ import { addPublicRoom, replacePublicRooms } from './publicRooms'
 import { addMessage, removeMessage, replaceMessage, replaceMessages } from './roomMessages'
 import { addRoomSubscription, removeRoomSubscription, replaceRoomSubscription, replaceRoomSubscriptions } from './roomSubscriptions'
 import { replaceStarMessages, starMessage, unstarMessage } from './starMessage'
-import { camelize } from '../helpers/data'
+import { camelize, listToObject } from '../helpers/data'
 
 export const createRoom = (name, type, onSuccess, onError) => (dispatch, getState) => {
   const channel = getRoomsChannel(getState())
@@ -31,9 +31,14 @@ export const joinRoomsChannel = (onSuccess, onError) => (dispatch, getState) => 
     channel.on('rooms:public:created', (data) => {
       dispatch(addPublicRoom(data))
     })
+
     channel.on('starred_messages', (data) => {
-      dispatch(replaceStarMessages(data['starred_messages']))
+      const cased = camelize(data['starred_messages'])
+      const asObject = listToObject(cased, 'messageId')
+
+      dispatch(replaceStarMessages(asObject))
     })
+
     return channel
   }
 
