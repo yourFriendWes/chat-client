@@ -2,17 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import history from '../../app/history'
 import { joinRoomChannel, viewRoom } from '../../actions/rooms'
-import { getCurrentUser } from '../../reducers/currentUser'
-import { getDirectMessageUser } from '../../reducers/roomSubscriptions'
-import { getRoom } from '../../reducers/userSubscriptions'
 import notification from '../../helpers/notification'
 import RoomContent from './_Content'
-import RoomSidebar from './_Sidebar'
+import RoomHeader from './_Header'
+import RoomDetails from './_Details'
 import Content from '../Layout/_Content'
-import Header from '../Layout/_Header'
 import Main from '../Layout/_Main'
 
-class Room extends Component {
+class OneRoom extends Component {
   componentDidMount () {
     this.props.onJoin(this.props.room)
   }
@@ -24,35 +21,25 @@ class Room extends Component {
   }
 
   render () {
-    const { heading, messageId, room } = this.props
+    const { messageId, room } = this.props
 
     return (
       <Main classes='chat-room'>
-        <Header>
-          <h2>{ heading }</h2>
-        </Header>
+        <RoomHeader room={room} />
         <Content>
           <RoomContent messageId={messageId} room={room} />
-          <RoomSidebar room={room} />
+          <RoomDetails room={room} />
         </Content>
       </Main>
     )
   }
 }
 
-const mapStateToProps = (state, { match }) => {
-  const currentUser = getCurrentUser(state)
-  const room = getRoom(state, match.params.room)
-  const heading = room.type === 'direct' ? getDirectMessageUser(state, match.params.room, currentUser).name : room.name
+const mapStateToProps = () => ({
 
-  return {
-    heading: heading,
-    messageId: match.params.messageId,
-    room: match.params.room
-  }
-}
+})
 
-const mapDispatchToProps = (dispatch, { match }) => ({
+const mapDispatchToProps = (dispatch) => ({
   onJoin: (room) => {
     const onSuccess = () => {
       dispatch(viewRoom(room))
@@ -67,4 +54,4 @@ const mapDispatchToProps = (dispatch, { match }) => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Room)
+export default connect(mapStateToProps, mapDispatchToProps)(OneRoom)

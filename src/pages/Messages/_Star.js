@@ -5,26 +5,27 @@ import Tooltip from '../../components/Tooltip'
 import { Button } from 'antd'
 
 const Star = ({currentUser, isStarred, toggleStar}) => {
+  const classes = 'star-message ' + (isStarred ? 'starred' : 'unstarred')
   const handleStarClick = (event) => {
     if (event) { event.preventDefault() }
     toggleStar()
   }
+
   return (
-
-    <Tooltip placement='top' title='Star this message'>
+    <Tooltip placement='top' title='Star Message'>
       <Button
+        className={classes}
         icon={isStarred ? 'star' : 'star-o'}
-        style={isStarred ? {color: '#ffd700'} : {color: '#000000'}}
         onClick={handleStarClick}
-        />
+      />
     </Tooltip>
-
   )
 }
 
 Star.displayName = 'Star'
 
 const mapStateToProps = () => ({
+
 })
 
 const mapDispatchToProps = (dispatch, {isStarred, messageId}) => ({
