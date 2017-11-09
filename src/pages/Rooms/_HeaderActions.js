@@ -5,11 +5,28 @@ import { leaveRoomChannel } from '../../actions/rooms'
 import { deleteSubscription } from '../../actions/userSubscriptions'
 import notification from '../../helpers/notification'
 import { rootPath } from '../../helpers/paths'
-import { Menu, Dropdown, Button } from 'antd'
+import { Menu, Dropdown, Button, Modal } from 'antd'
 
-const RoomHeaderActions = ({ handleLeave, isSubscribed, isDirectMessage }) => {
+const RoomHeaderActions = ({ handleLeave, handleArchive, isSubscribed, isDirectMessage, room }) => {
   if (!isSubscribed || isDirectMessage) {
     return null
+  }
+
+  const onArchiveConfirm = (event) => {
+    if (event) { event.preventDefault() }
+    console.log(room)
+
+    Modal.confirm({
+      cancelText: 'Cancel',
+      content: "This will disable all users from posting new messages and prevent new users from joining "+ room,
+      okText: 'Archive',
+      onCancel: () => false,
+      onOk: () => {
+        handleArchive()
+        return false
+      },
+      title: 'Do you want to archive room: ' + room + '?'
+    })
   }
 
   const roomSettings = (
@@ -17,6 +34,11 @@ const RoomHeaderActions = ({ handleLeave, isSubscribed, isDirectMessage }) => {
       <Menu.Item>
         { isSubscribed && !isDirectMessage &&
           <button onClick={handleLeave}>Leave Room</button>
+        }
+      </Menu.Item>
+      <Menu.Item>
+        { isSubscribed && !isDirectMessage &&
+        <button onClick={onArchiveConfirm}>Archive Room</button>
         }
       </Menu.Item>
     </Menu>
@@ -50,6 +72,10 @@ const mapDispatchToProps = (dispatch, { room: slug }) => ({
     }
 
     return dispatch(deleteSubscription(slug, onSuccess, onError))
+  },
+
+  handleArchive: () => {
+    console.log("Clicked Archive")
   }
 })
 
