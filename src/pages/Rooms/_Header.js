@@ -6,17 +6,17 @@ import { getIsSubscribed, getRoom } from '../../reducers/userSubscriptions'
 import Header from '../Layout/_Header'
 import RoomHeaderActions from './_HeaderActions'
 
-const RoomHeader = ({ heading, isDirectMessage, isSubscribed, room }) => (
+const RoomHeader = ({ heading, isDirectMessage, isSubscribed, isArchived, room}) => (
   <Header>
     <h2>{ heading }</h2>
     <RoomHeaderActions
       room={room}
       isSubscribed={isSubscribed}
       isDirectMessage={isDirectMessage}
+      isArchived={isArchived}
     />
-  </Header>
+</Header>
 )
-
 RoomHeader.displayName = 'RoomHeader'
 
 const mapStateToProps = (state, { room: slug }) => {
@@ -24,11 +24,13 @@ const mapStateToProps = (state, { room: slug }) => {
   const room = getRoom(state, slug)
   const isDirectMessage = room.type === 'direct'
   const heading = isDirectMessage ? getDirectMessageUser(state, slug, currentUser).name : (room.name || slug)
+  const isArchived = room.state === 'archived'
 
   return {
     heading: heading,
     isDirectMessage: isDirectMessage,
-    isSubscribed: getIsSubscribed(state, slug)
+    isSubscribed: getIsSubscribed(state, slug),
+    isArchived: isArchived
   }
 }
 
