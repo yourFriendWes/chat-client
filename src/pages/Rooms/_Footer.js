@@ -6,7 +6,7 @@ import EditMessage from '../Messages/_Edit'
 import NewMessage from '../Messages/_New'
 import { Button } from 'antd'
 
-const RoomFooter = ({ isSubscribed, joinRoom, messageId, room }) => {
+const RoomFooter = ({ isArchived, isSubscribed, joinRoom, messageId, room }) => {
   const joinFooter = (
     <div className='chat-join-mesage-footer'>
       Viewing Room <strong>{room}</strong>
@@ -14,21 +14,33 @@ const RoomFooter = ({ isSubscribed, joinRoom, messageId, room }) => {
       <Button onClick={joinRoom}>Join</Button>
     </div>
   )
+
+  const archivedFooter = (
+    <div>
+      Viewing Archived Room <strong>{room}</strong>
+      {' '}
+    </div>
+  )
   const messageFooter = messageId
     ? <EditMessage key={room} messageId={messageId} room={room} />
     : <NewMessage key={room} room={room} />
 
-  return (
+  const activeFooter =  (
     <div className='chat-room-content-footer'>
       { isSubscribed ? messageFooter : joinFooter }
     </div>
+  )
+
+  return (
+    isArchived ? archivedFooter : activeFooter
   )
 }
 
 RoomFooter.displayName = 'RoomFooter'
 
 const mapStateToProps = (state, { room }) => ({
-  isSubscribed: getIsSubscribed(state, room)
+  isSubscribed: getIsSubscribed(state, room),
+  isArchived: room.state === 'archived'
 })
 
 const mapDispatchToProps = (dispatch, { room }) => ({
