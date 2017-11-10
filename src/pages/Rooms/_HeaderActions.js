@@ -7,7 +7,7 @@ import notification from '../../helpers/notification'
 import { rootPath } from '../../helpers/paths'
 import { Menu, Dropdown, Button, Modal } from 'antd'
 
-const RoomHeaderActions = ({ handleLeave, handleArchive, isSubscribed, isDirectMessage, room }) => {
+const RoomHeaderActions = ({ handleLeave, handleArchive, handleReactivate, isArchived, isSubscribed, isDirectMessage, room }) => {
   if (!isSubscribed || isDirectMessage) {
     return null
   }
@@ -29,6 +29,24 @@ const RoomHeaderActions = ({ handleLeave, handleArchive, isSubscribed, isDirectM
     })
   }
 
+  const onReactivateConfirm = (event) => {
+    if (event) { event.preventDefault() }
+    console.log(room)
+
+    Modal.confirm({
+      cancelText: 'Cancel',
+      content: "This will reopen this room for all subscribed users and allow new users to join "+ room,
+      okText: 'Reactivate',
+      onCancel: () => false,
+      onOk: () => {
+        handleReactivate()
+        return false
+      },
+      title: 'Do you want to reactivate room: ' + room + '?'
+    })
+  }
+
+
   const roomSettings = (
     <Menu>
       <Menu.Item>
@@ -37,8 +55,13 @@ const RoomHeaderActions = ({ handleLeave, handleArchive, isSubscribed, isDirectM
         }
       </Menu.Item>
       <Menu.Item>
-        { isSubscribed && !isDirectMessage &&
+        { isSubscribed && !isDirectMessage && !isArchived &&
         <button onClick={onArchiveConfirm}>Archive Room</button>
+        }
+      </Menu.Item>
+      <Menu.Item>
+        { isSubscribed && !isDirectMessage && isArchived &&
+        <button onClick={onReactivateConfirm}>Reactivate Room</button>
         }
       </Menu.Item>
     </Menu>
@@ -56,7 +79,6 @@ const RoomHeaderActions = ({ handleLeave, handleArchive, isSubscribed, isDirectM
 RoomHeaderActions.displayName = 'RoomHeaderActions'
 
 const mapStateToProps = () => ({
-
 })
 
 const mapDispatchToProps = (dispatch, { room: slug }) => ({
@@ -75,7 +97,7 @@ const mapDispatchToProps = (dispatch, { room: slug }) => ({
   },
 
   handleArchive: () => {
-    console.log("Clicked Archive")
+    console.log('Clicked Archive ' + slug)
   }
 })
 
