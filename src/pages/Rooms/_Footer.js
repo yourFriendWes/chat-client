@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { createSubscription } from '../../actions/userSubscriptions'
-import { getIsSubscribed } from '../../reducers/userSubscriptions'
+import { getIsSubscribed, getRoom } from '../../reducers/userSubscriptions'
 import EditMessage from '../Messages/_Edit'
 import NewMessage from '../Messages/_New'
 import { Button } from 'antd'
@@ -25,7 +25,7 @@ const RoomFooter = ({ isArchived, isSubscribed, joinRoom, messageId, room }) => 
     ? <EditMessage key={room} messageId={messageId} room={room} />
     : <NewMessage key={room} room={room} />
 
-  const activeFooter =  (
+  const activeFooter = (
     <div className='chat-room-content-footer'>
       { isSubscribed ? messageFooter : joinFooter }
     </div>
@@ -38,10 +38,14 @@ const RoomFooter = ({ isArchived, isSubscribed, joinRoom, messageId, room }) => 
 
 RoomFooter.displayName = 'RoomFooter'
 
-const mapStateToProps = (state, { room }) => ({
-  isSubscribed: getIsSubscribed(state, room),
-  isArchived: room.state === 'archived'
-})
+const mapStateToProps = (state, { room: slug }) => {
+  const room = getRoom(state, slug)
+
+  return {
+    isArchived: room.state === 'archived',
+    isSubscribed: getIsSubscribed(state, slug)
+  }
+}
 
 const mapDispatchToProps = (dispatch, { room }) => ({
   joinRoom: () => dispatch(createSubscription(room))

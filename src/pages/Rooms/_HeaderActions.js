@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import history from '../../app/history'
-import { leaveRoomChannel } from '../../actions/rooms'
+import { archiveRoom, leaveRoomChannel } from '../../actions/rooms'
+// import { getRoom } from '../../reducers/userSubscriptions'
 import { deleteSubscription } from '../../actions/userSubscriptions'
 import notification from '../../helpers/notification'
 import { rootPath } from '../../helpers/paths'
@@ -14,11 +15,10 @@ const RoomHeaderActions = ({ handleLeave, handleArchive, handleReactivate, isArc
 
   const onArchiveConfirm = (event) => {
     if (event) { event.preventDefault() }
-    console.log(room)
 
     Modal.confirm({
       cancelText: 'Cancel',
-      content: "This will disable all users from posting new messages and prevent new users from joining "+ room,
+      content: 'This will disable all users from posting new messages and prevent new users from joining ' + room,
       okText: 'Archive',
       onCancel: () => false,
       onOk: () => {
@@ -31,11 +31,10 @@ const RoomHeaderActions = ({ handleLeave, handleArchive, handleReactivate, isArc
 
   const onReactivateConfirm = (event) => {
     if (event) { event.preventDefault() }
-    console.log(room)
 
     Modal.confirm({
       cancelText: 'Cancel',
-      content: "This will reopen this room for all subscribed users and allow new users to join "+ room,
+      content: 'This will reopen this room for all subscribed users and allow new users to join ' + room,
       okText: 'Reactivate',
       onCancel: () => false,
       onOk: () => {
@@ -45,7 +44,6 @@ const RoomHeaderActions = ({ handleLeave, handleArchive, handleReactivate, isArc
       title: 'Do you want to reactivate room: ' + room + '?'
     })
   }
-
 
   const roomSettings = (
     <Menu>
@@ -97,7 +95,7 @@ const mapDispatchToProps = (dispatch, { room: slug }) => ({
   },
 
   handleArchive: () => {
-    console.log('Clicked Archive ' + slug)
+    return dispatch(archiveRoom(slug))
   }
 })
 
