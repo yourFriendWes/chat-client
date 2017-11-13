@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import history from '../../app/history'
-import { archiveRoom, leaveRoomChannel } from '../../actions/rooms'
+import { archiveRoom, leaveRoomChannel, reactivateRoom } from '../../actions/rooms'
 // import { getRoom } from '../../reducers/userSubscriptions'
 import { deleteSubscription } from '../../actions/userSubscriptions'
 import notification from '../../helpers/notification'
@@ -96,6 +96,10 @@ const mapDispatchToProps = (dispatch, { room: slug }) => ({
 
   handleArchive: () => {
     return dispatch(archiveRoom(slug))
+  },
+
+  handleReactivate: () => {
+    return dispatch(reactivateRoom(slug))
   }
 })
 
