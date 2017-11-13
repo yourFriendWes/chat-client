@@ -109,3 +109,11 @@ export const leaveRoomChannel = (slug) => (dispatch) => {
 
   return dispatch(leaveChannel(key))
 }
+
+export const reactivateRoom = (slug, onSuccess, onError) => (dispatch, getState) => {
+  const channel = getRoomChannel(getState(), slug)
+  return channel
+    .push('room:activate')
+    .receive('ok', (response) => onSuccess && onSuccess(response))
+    .receive('error', (response) => onError && onError(response))
+}
