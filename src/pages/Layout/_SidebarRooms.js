@@ -44,11 +44,17 @@ const RoomsSidebar = ({ handleDirectMessageClose, rooms }) => {
       </InvisibleContainer>
     )
   }
+  const displayName = (room) => (
+     <div>
+       { room.state === 'archived' && <Icon className='chat-room-link-icon' type='folder' /> }
+       { room.slug }
+     </div>
+   )
 
   const displaySupportRoom = (room, notifications) => (
     <InvisibleContainer>
       <div>
-        { room.slug }
+        { displayName(room) }
       </div>
       <div>
         { notifications &&
