@@ -14,8 +14,15 @@ const RoomsSidebarList = ({ displayRoom, focusedRoom, lastMessage, newLink, room
     const lastMessageAt = isEmpty(lastRoomMessage) ? 0 : moment(lastRoomMessage.insertedAt).unix()
     const lastViewedAt = moment(viewedAt(room) || 0).unix()
     const isFocused = (focusedRoom === room.slug)
+    const isArchived = room.state === 'archived'
     const hasNewMessages = !isFocused && (lastMessageAt > lastViewedAt)
     const classes = hasNewMessages ? 'new-message' : ''
+    const displayName = (room) => (
+       <div>
+         { isArchived && <Icon className='chat-room-link-icon' type='folder' /> }
+         { room.slug }
+       </div>
+     )
 
     let notifications
 
@@ -26,7 +33,7 @@ const RoomsSidebarList = ({ displayRoom, focusedRoom, lastMessage, newLink, room
     return (
       <li key={room.slug} className={classes}>
         <Link className='chat-room-link' to={'/rooms/' + room.slug}>
-          {displayRoom ? displayRoom(room, notifications) : room.slug}
+          { displayRoom ? displayRoom(room, notifications) : displayName(room) }
         </Link>
       </li>
     )
