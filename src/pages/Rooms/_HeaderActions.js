@@ -46,21 +46,21 @@ const RoomHeaderActions = ({ handleLeave, handleArchive, handleReactivate, isArc
 
   const roomSettings = (
     <Menu>
+      { isSubscribed && !isDirectMessage &&
       <Menu.Item>
-        { isSubscribed && !isDirectMessage &&
-          <button onClick={handleLeave}>Leave Room</button>
-        }
+        <button onClick={handleLeave}>Leave Room</button>
       </Menu.Item>
+      }
+      { isSubscribed && !isDirectMessage && !isArchived &&
       <Menu.Item>
-        { isSubscribed && !isDirectMessage && !isArchived &&
         <button onClick={onArchiveConfirm}>Archive Room</button>
-        }
       </Menu.Item>
+      }
+      { isSubscribed && !isDirectMessage && isArchived &&
       <Menu.Item>
-        { isSubscribed && !isDirectMessage && isArchived &&
         <button onClick={onReactivateConfirm}>Reactivate Room</button>
-        }
       </Menu.Item>
+      }
     </Menu>
   )
 

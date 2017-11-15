@@ -39,7 +39,7 @@ const RoomFooter = ({ isArchived, isSubscribed, joinRoom, messageId, room }) => 
 
 RoomFooter.displayName = 'RoomFooter'
 
-const mapStateToProps = (state, { room: slug}) => {
+const mapStateToProps = (state, { room: slug }) => {
   const isSubscribed = getIsSubscribed(state, slug)
   const room = isSubscribed ? getRoom(state, slug) : getPublicRoom(state, slug)
   return {
