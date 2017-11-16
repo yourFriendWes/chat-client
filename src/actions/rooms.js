@@ -8,12 +8,11 @@ import { replaceStarMessages, starMessage, unstarMessage } from './starMessage'
 import { camelize, listToObject } from '../helpers/data'
 
 export const archiveRoom = (slug, onSuccess, onError) => (dispatch, getState) => {
-  console.log(getState())
   const channel = getRoomChannel(getState(), slug)
   return channel
     .push('room:archive')
-  //   .receive('ok', (response) => onSuccess && onSuccess(response))
-  //   .receive('error', (response) => onError && onError(response))
+    .receive('ok', (response) => onSuccess && onSuccess(response))
+    .receive('error', (response) => onError && onError(response))
 }
 
 export const createRoom = (name, type, onSuccess, onError) => (dispatch, getState) => {
@@ -115,6 +114,6 @@ export const reactivateRoom = (slug, onSuccess, onError) => (dispatch, getState)
   const channel = getRoomChannel(getState(), slug)
   return channel
     .push('room:activate')
-  //   .receive('ok', (response) => onSuccess && onSuccess(response))
-  //   .receive('error', (response) => onError && onError(response))
+    .receive('ok', (response) => onSuccess && onSuccess(response))
+    .receive('error', (response) => onError && onError(response))
 }
