@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { createSubscription } from '../../actions/userSubscriptions'
 import { getPublicRoom } from '../../reducers/publicRooms'
+import { getSupportRoom } from '../../reducers/supportRooms'
 import { getIsSubscribed, getRoom } from '../../reducers/userSubscriptions'
 import EditMessage from '../Messages/_Edit'
 import NewMessage from '../Messages/_New'
@@ -41,7 +42,11 @@ RoomFooter.displayName = 'RoomFooter'
 
 const mapStateToProps = (state, { room: slug }) => {
   const isSubscribed = getIsSubscribed(state, slug)
-  const room = isSubscribed ? getRoom(state, slug) : getPublicRoom(state, slug)
+  var room = isSubscribed ? getRoom(state, slug) : getPublicRoom(state, slug)
+
+  if (room.keys === undefined) {
+    room = getSupportRoom(state, slug)
+  }
   return {
     isArchived: room.state === 'archived',
     isSubscribed: isSubscribed
