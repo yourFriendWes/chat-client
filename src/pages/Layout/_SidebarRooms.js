@@ -7,7 +7,7 @@ import { getIsConnected } from '../../reducers/connectedUsers'
 import { getCurrentUser } from '../../reducers/currentUser'
 import { getDirectMessageUser } from '../../reducers/roomSubscriptions'
 import { getSupportRooms } from '../../reducers/supportRooms'
-import { getOpenRoomsByType, getRoomsByType } from '../../reducers/userSubscriptions'
+import { getSubscribedRoomsBy } from '../../reducers/userSubscriptions'
 import { newDirectMessagePath, newRoomPath, roomPath, rootPath, searchRoomsPath } from '../../helpers/paths'
 import InvisibleContainer from '../../components/InvisibleContainer'
 import SidebarRoomsList from './_SidebarRoomList'
@@ -93,7 +93,7 @@ const RoomsSidebar = ({ handleDirectMessageClose, rooms }) => {
 
 const mapStateToProps = (state) => {
   const currentUser = getCurrentUser(state)
-  const directMessages = map(getOpenRoomsByType(state, 'direct'), (room) => {
+  const directMessages = map(getSubscribedRoomsBy(state, {state: 'open', type: 'direct'}), (room) => {
     room.directMessageUser = getDirectMessageUser(state, room.slug, currentUser)
     room.directMessageUser.isConnected = getIsConnected(state, room.directMessageUser.id)
 
@@ -103,8 +103,8 @@ const mapStateToProps = (state) => {
   return {
     rooms: {
       direct: sortBy(directMessages, (room) => room.directMessageUser.name),
-      private: sortBy(getRoomsByType(state, 'private'), 'slug'),
-      public: sortBy(getRoomsByType(state, 'public'), 'slug'),
+      private: sortBy(getSubscribedRoomsBy(state, {type: 'private'}), 'slug'),
+      public: sortBy(getSubscribedRoomsBy(state, {type: 'public'}), 'slug'),
       support: sortBy(getSupportRooms(state), 'slug')
     }
   }

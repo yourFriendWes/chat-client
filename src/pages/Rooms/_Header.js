@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { getCurrentUser } from '../../reducers/currentUser'
+import { getRoom } from '../../reducers/rooms'
 import { getDirectMessageUser } from '../../reducers/roomSubscriptions'
-import { getIsSubscribed, getRoom } from '../../reducers/userSubscriptions'
+import { getIsSubscribed } from '../../reducers/userSubscriptions'
 import Header from '../Layout/_Header'
 import RoomHeaderActions from './_HeaderActions'
 

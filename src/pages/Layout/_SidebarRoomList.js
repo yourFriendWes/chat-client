@@ -10,12 +10,12 @@ import { Icon } from 'antd'
 
 const RoomsSidebarList = ({ displayRoom, focusedRoom, lastMessage, newLink, roomMessagesAfter, rooms, title, titleLink, viewedAt }) => {
   const renderRoom = (room) => {
+    const isArchived = room.state === 'archived'
     const lastRoomMessage = lastMessage(room)
     const lastMessageAt = isEmpty(lastRoomMessage) ? 0 : moment(lastRoomMessage.insertedAt).unix()
     const lastViewed = viewedAt(room)
     const lastViewedAt = lastViewed ? moment(lastViewed).unix() : moment().unix()
     const isFocused = (focusedRoom === room.slug)
-    const isArchived = room.state === 'archived'
     const hasNewMessages = !isFocused && (lastMessageAt > lastViewedAt)
     const classes = hasNewMessages ? 'new-message' : ''
     const displayName = (room) => (

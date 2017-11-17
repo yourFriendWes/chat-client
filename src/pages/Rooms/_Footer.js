@@ -1,9 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { createSubscription } from '../../actions/userSubscriptions'
-import { getPublicRoom } from '../../reducers/publicRooms'
-import { getSupportRoom } from '../../reducers/supportRooms'
-import { getIsSubscribed, getRoom } from '../../reducers/userSubscriptions'
+import { getRoom } from '../../reducers/rooms'
+import { getIsSubscribed } from '../../reducers/userSubscriptions'
 import EditMessage from '../Messages/_Edit'
 import NewMessage from '../Messages/_New'
 import { Button } from 'antd'
@@ -42,12 +41,8 @@ RoomFooter.displayName = 'RoomFooter'
 
 const mapStateToProps = (state, { room: slug }) => {
   const isSubscribed = getIsSubscribed(state, slug)
-  var room = isSubscribed ? getRoom(state, slug) : getPublicRoom(state, slug)
+  const room = getRoom(state, slug)
 
-  //identifies a support room that a user is not subscribed to
-  if (!room.state) {
-    room = getSupportRoom(state, slug)
-  }
   return {
     isArchived: room.state === 'archived',
     isSubscribed: isSubscribed
