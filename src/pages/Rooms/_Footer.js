@@ -44,7 +44,8 @@ const mapStateToProps = (state, { room: slug }) => {
   const isSubscribed = getIsSubscribed(state, slug)
   var room = isSubscribed ? getRoom(state, slug) : getPublicRoom(state, slug)
 
-  if (room.keys === undefined) {
+  //identifies a support room that a user is not subscribed to
+  if (!room.state) {
     room = getSupportRoom(state, slug)
   }
   return {
