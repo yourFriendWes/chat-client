@@ -19,10 +19,10 @@ const RoomsSidebarList = ({ displayRoom, focusedRoom, lastMessage, newLink, room
     const hasNewMessages = !isFocused && (lastMessageAt > lastViewedAt)
     const classes = hasNewMessages ? 'new-message' : ''
     const displayName = (room) => (
-       <div>
-         { isArchived && <Icon className='chat-room-link-icon' type='folder' /> }
-         { room.slug }
-       </div>
+      <div>
+        { isArchived && <Icon className='chat-room-link-icon' type='folder' /> }
+        { room.slug }
+      </div>
      )
 
     let notifications

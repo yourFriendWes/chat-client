@@ -6,8 +6,8 @@ import { updateSubscription } from '../../actions/userSubscriptions'
 import { getIsConnected } from '../../reducers/connectedUsers'
 import { getCurrentUser } from '../../reducers/currentUser'
 import { getDirectMessageUser } from '../../reducers/roomSubscriptions'
-import { getOpenRoomsByType, getRoomsByType } from '../../reducers/userSubscriptions'
 import { getSupportRooms } from '../../reducers/supportRooms'
+import { getOpenRoomsByType, getRoomsByType } from '../../reducers/userSubscriptions'
 import { newDirectMessagePath, newRoomPath, roomPath, rootPath, searchRoomsPath } from '../../helpers/paths'
 import InvisibleContainer from '../../components/InvisibleContainer'
 import SidebarRoomsList from './_SidebarRoomList'
@@ -45,10 +45,10 @@ const RoomsSidebar = ({ handleDirectMessageClose, rooms }) => {
     )
   }
   const displayName = (room) => (
-     <div>
-       { room.state === 'archived' && <Icon className='chat-room-link-icon' type='folder' /> }
-       { room.slug }
-     </div>
+    <div>
+      { room.state === 'archived' && <Icon className='chat-room-link-icon' type='folder' /> }
+      { room.slug }
+    </div>
    )
 
   const displaySupportRoom = (room, notifications) => (
