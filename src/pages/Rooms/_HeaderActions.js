@@ -17,7 +17,7 @@ const RoomHeaderActions = ({ handleLeave, handleArchive, handleReactivate, isArc
 
     Modal.confirm({
       cancelText: 'Cancel',
-      content: 'This will disable all users from posting new messages and prevent new users from joining ' + room,
+      content: 'Archiving a room will disable all users from posting new messages and prevent new users from joining ' + room,
       okText: 'Archive',
       onCancel: () => false,
       onOk: () => {
@@ -85,18 +85,14 @@ const mapDispatchToProps = (dispatch, { room: slug }) => ({
       notification('Left room ' + slug, 'success')
       history.push(rootPath)
     }
-
     const onError = () => {
       notification('Error leaving room ' + slug, 'error')
     }
-
     return dispatch(deleteSubscription(slug, onSuccess, onError))
   },
-
   handleArchive: () => {
     return dispatch(archiveRoom(slug))
   },
-
   handleReactivate: () => {
     return dispatch(reactivateRoom(slug))
   }
