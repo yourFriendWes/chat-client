@@ -16,12 +16,6 @@ const RoomFooter = ({ isArchived, isSubscribed, joinRoom, messageId, room }) => 
     </div>
   )
 
-  const archivedFooter = (
-    <div>
-      Viewing Archived Room <strong>{room}</strong>
-      {' '}
-    </div>
-  )
   const messageFooter = messageId
     ? <EditMessage key={room} messageId={messageId} room={room} />
     : <NewMessage key={room} room={room} />
@@ -29,6 +23,13 @@ const RoomFooter = ({ isArchived, isSubscribed, joinRoom, messageId, room }) => 
   const activeFooter = (
     <div className='chat-room-content-footer'>
       { isSubscribed ? messageFooter : joinFooter }
+    </div>
+  )
+
+  const archivedFooter = (
+    <div className='chat-room-content-footer'>
+      Viewing Archived Room <strong>{room}</strong>
+      {' '}
     </div>
   )
 
